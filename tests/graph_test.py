@@ -16,7 +16,8 @@ class GraphTests(unittest.TestCase):
         self.assertTrue(16 in self.graph.successors(2))
 
     def test_can_draw_graph(self):
-        nx.draw(self.graph, nodelist=list(self.graph.successors(2)), edgelist=[edge for edge in self.graph.edges if 2 in edge], with_labels=True)
+        nx.draw(self.graph, nodelist=list(self.graph.successors(2)),
+                edgelist=[edge for edge in self.graph.edges if 2 in edge], with_labels=True)
         # plt.show()
         self.assertTrue(True)
 
@@ -33,6 +34,16 @@ class GraphTests(unittest.TestCase):
     def test_can_find_shortest_path_to_target(self):
         all_paths = nx.single_target_shortest_path(self.graph, 59)
         self.assertGreater(len(all_paths), 0)
+
+    def test_can_load_lectures(self):
+        lecture_file = '../LectureBank-master/LB-Paper/lecturebank.tsv'
+        lectures = graph.load_lectures(lecture_file)
+
+        # importing topic to list
+        # Replace ID with topic name
+        # lectures['Topic'] = self.topics['Name'][['Topic_ID'] == self.topics['ID']]
+        self.assertIsNotNone(lectures)
+
 
 if __name__ == '__main__':
     unittest.main()

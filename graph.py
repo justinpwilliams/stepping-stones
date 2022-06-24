@@ -1,10 +1,11 @@
 import networkx as nx
 import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
 
 topics_file = "LectureBank-master/LB-Paper/208topics.csv"
 prereq_file = "LectureBank-master/LB-Paper/prerequisite_annotation.csv"
-
+lecture_file = "LectureBank-master/LB-Paper/lecturebank.tsv"
 
 def load_topics(filename=topics_file):
     return pd.read_csv(filename, names=['ID', 'Name', 'Link'])
@@ -23,3 +24,8 @@ def make_graph(topics, prereqs):
     # Add directed edges when prerequisite relationship is true
     g.add_edges_from([(ids[0], ids[1]) for ids in prereqs.values if ids[2] == 1])
     return g
+
+
+def load_lectures(lecture_file=lecture_file):
+    return pd.read_csv(lecture_file, names=["ID", "Title", "URL", "Topic_ID", "Year", "Instructor", "Path", "Venue"],
+                       sep="\t")
