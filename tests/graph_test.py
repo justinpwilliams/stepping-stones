@@ -8,8 +8,11 @@ class GraphTests(unittest.TestCase):
     def setUp(self) -> None:
         self.topics_file = "../LectureBank-master/LB-Paper/208topics.csv"
         self.prereq_file = "../LectureBank-master/LB-Paper/prerequisite_annotation.csv"
+        self.prereq_file = "../LectureBank-master/LB-Paper/prerequisite_annotation.csv"
+        self.taxonomy_file = "../LectureBank-master/LB-Paper/taxonomy.tsv"
         self.topics = graph.load_topics(self.topics_file)
         self.prereqs = graph.load_prereqs(self.prereq_file)
+        self.taxonomy = graph.read_taxonomy(self.taxonomy_file)
         self.graph = graph.make_graph(self.topics, self.prereqs)
 
     def test_can_add_directed_edges_to_graph(self):
@@ -43,6 +46,37 @@ class GraphTests(unittest.TestCase):
         # Replace ID with topic name
         # lectures['Topic'] = self.topics['Name'][['Topic_ID'] == self.topics['ID']]
         self.assertIsNotNone(lectures)
+
+    def test_can_reverse_graph(self):
+        reversed = self.graph.reverse()
+        print(list(reversed.predecessors(19)))
+        self.assertTrue(2 in list(reversed.predecessors(19)))
+
+    def test_find_arboresence_from_reversed(self):
+        # reversed = self.graph.reverse()
+        # # preds = self.graph.predecessors(152)
+        # preds = nx.descendants(reversed, 152) # descendants of the reversed graph.
+        # print("Preds of 152, ", preds)
+        # pred_sub = reversed.subgraph(set(preds).add(152)).copy()
+
+        # BFS from goal
+        bfs_tree = nx.bfs_tree(self.graph, source=2, reverse=True)
+        print(list(bfs_tree.edges()))
+        bfs_tree.remove_nodes_from(nx.descendants(bfs_tree, 109)) # This method treats 109 as a terminal node
+        print(list(bfs_tree.edges()))
+        nx.draw(bfs_tree, arrows=True, with_labels=True)
+        plt.show()
+        self.assertIsNotNone(bfs_tree)
+
+    def test_can_read_taxonomy(self):
+        self.assertIsNotNone(self.taxonomy)
+
+    def test_can_match_topic_to_taxonomy_id(self):
+        concept_name = "Topic modeling" # id 96 from 208 topics,
+        topic_lookup_ids = graph.get_lookup_topic(concept_name, self.taxonomy)
+        self.assertTrue(1179 in topic_lookup_ids)
+
+
 
 
 if __name__ == '__main__':
