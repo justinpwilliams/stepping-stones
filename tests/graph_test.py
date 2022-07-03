@@ -53,20 +53,22 @@ class GraphTests(unittest.TestCase):
         self.assertTrue(2 in list(reversed.predecessors(19)))
 
     def test_find_arboresence_from_reversed(self):
-        # reversed = self.graph.reverse()
-        # # preds = self.graph.predecessors(152)
-        # preds = nx.descendants(reversed, 152) # descendants of the reversed graph.
+        # reversed = self.graph_to_draw.reverse()
+        # # preds = self.graph_to_draw.predecessors(152)
+        # preds = nx.descendants(reversed, 152) # descendants of the reversed graph_to_draw.
         # print("Preds of 152, ", preds)
         # pred_sub = reversed.subgraph(set(preds).add(152)).copy()
 
         # BFS from goal
-        bfs_tree = nx.bfs_tree(self.graph, source=2, reverse=True)
-        print(list(bfs_tree.edges()))
-        bfs_tree.remove_nodes_from(nx.descendants(bfs_tree, 109)) # This method treats 109 as a terminal node
-        print(list(bfs_tree.edges()))
-        nx.draw(bfs_tree, arrows=True, with_labels=True)
-        plt.show()
-        self.assertIsNotNone(bfs_tree)
+        # bfs_tree = nx.bfs_tree(self.graph_to_draw, source=12, reverse=True)
+        # print(list(bfs_tree.edges()))
+        # # bfs_tree.remove_nodes_from(nx.descendants(bfs_tree, 100)) # This method treats 109 as a terminal node
+        # # print(list(bfs_tree.edges()))
+        # nx.draw(bfs_tree, arrows=True, with_labels=True)
+        # plt.show()
+
+        subgraph = graph.generate_tree(self.graph, 12, 173)
+        self.assertIsNotNone(subgraph)
 
     def test_can_read_taxonomy(self):
         self.assertIsNotNone(self.taxonomy)

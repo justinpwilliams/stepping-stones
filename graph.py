@@ -32,20 +32,72 @@ def load_lectures(lecture_file=lecture_file):
                        sep="\t")
 
 
-if __name__ == "__main__":
-    topics_file = "LectureBank-master/LB-Paper/208topics.csv"
-    prereq_file = "LectureBank-master/LB-Paper/prerequisite_annotation.csv"
-    topics = load_topics(topics_file)
-    prereqs = load_prereqs(prereq_file)
-    graph = make_graph(topics, prereqs)
-
-
 def read_taxonomy(taxonomy_file):
     return pd.read_csv(taxonomy_file, sep="\t")
 
 
-def get_lookup_topic(concept_name:str, taxonomy:pd.DataFrame)->int:
+def get_lookup_topic(concept_name: str, taxonomy: pd.DataFrame) -> int:
     matches = taxonomy['topic_name'].str.contains(concept_name.lower(), case=False, regex=False)
     if matches is None:
         pass  # TODO add lecture lookup.
     return taxonomy[matches]['true_id'].values
+
+
+def generate_tree(concept_graph, goal_concept_id, mastered_concept_id=None):
+    """
+    Generate a concept tree from the concept graph_to_draw given one or more goal concepts and one or more mastered concepts.
+    :param concept_graph: The graph_to_draw of concepts which should contain the goal_concepts and mastered_concepts
+    :param goal_concepts: Iterable of Goal concept ids
+    :param mastered_concepts: Iterable of mastered concept ids
+    :return: The graph_to_draw of mastered concepts with paths to goal concepts.
+    """
+    # BFS from goal
+    subgraph = nx.bfs_tree(concept_graph, source=goal_concept_id, reverse=True)
+
+    # TODO Remove
+    print(list(subgraph.edges()))
+
+    if mastered_concept_id:
+        subgraph.remove_nodes_from(
+            nx.descendants(subgraph, mastered_concept_id))  # This method treats 109 as a terminal node
+
+    # TODO Remove
+    print(list(subgraph.edges()))
+
+    return subgraph.reverse()
+
+
+def draw_graph(graph_to_draw):
+    nx.draw(graph_to_draw, arrows=True, with_labels=True)
+    plt.show()
+
+
+if __name__ == "__main__":
+    topics_file = "LectureBank-master/LB-Paper/208topics.csv"
+    prereq_file = "LectureBank-master/LB-Paper/prerequisite_annotation.csv"
+    taxonomy_file = "LectureBank-master/LB-Paper/taxonomy.tsv"
+    topics = load_topics(topics_file)
+    prereqs = load_prereqs(prereq_file)
+    graph = make_graph(topics, prereqs)
+    taxonomy = read_taxonomy(taxonomy_file)
+
+    # Example 1: Goal Concept-Attention Models, No Mastered Concepts
+    ex1_graph = generate_tree(graph, 12, None)
+    draw_graph(ex1_graph)
+
+    # Example 2: Goal Concept-Attention Models, One Mastered Concept
+    ex2_graph = generate_tree(graph, 12, 173)
+    draw_graph(ex2_graph)
+
+    # Example 3: Goal Concept with one prerequisite
+    ex3_graph = generate_tree(graph, 155, None)
+    draw_graph(ex3_graph)
+
+    # Example 4: 155 is a prereq of 24 and 47, how is this displayed.
+    ex4_graph = generate_tree(graph, 24, None)
+    draw_graph(ex4_graph)
+
+    # Example 5: Should remove 47 and 155, doesn't TODO
+    ex5_graph = generate_tree(graph, 24, 47)
+    draw_graph(ex5_graph)
+
