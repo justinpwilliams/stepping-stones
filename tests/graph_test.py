@@ -67,7 +67,7 @@ class GraphTests(unittest.TestCase):
         # nx.draw(bfs_tree, arrows=True, with_labels=True)
         # plt.show()
 
-        subgraph = graph.generate_tree(self.graph, 12, 173)
+        subgraph = graph.generate_subgraph(self.graph, 12, 173)
         self.assertIsNotNone(subgraph)
 
     def test_can_read_taxonomy(self):
