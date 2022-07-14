@@ -65,7 +65,7 @@ def generate_subgraph(concept_graph, goal_concept_id, mastered_concept_id:list =
     for mastered_concept in mastered_concept_id:
     # if mastered_concept_id:
         mastered_ancestors.add(set(nx.ancestors(graph, mastered_concept))) # TODO Error with this line. add set to set.
-        mastered_ancestors.add(mastered_concept)
+        mastered_ancestors.add(mastered_concept)  # TODO, keep mastered.
 
     # Remove mastered and ancestors of mastered from goal and ancestors
     goal_ancestors = list(goal_ancestors - mastered_ancestors)
