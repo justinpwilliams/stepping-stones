@@ -3,6 +3,14 @@ from azure.ai.textanalytics._models import RecognizeEntitiesResult as RER
 from azure.core.credentials import AzureKeyCredential
 from joblib import dump, load
 
+from sentence_transformers import SentenceTransformer, util
+from sklearn.metrics.pairwise import cosine_similarity
+import numpy as np
+
+import graph
+
+model = SentenceTransformer('sentence-transformers/all-distilroberta-v1')
+
 key = "d4891fdc2cfb480a9b7b8faab9dea137"
 endpoint = "https://westus.api.cognitive.microsoft.com/"
 
@@ -13,9 +21,6 @@ def authenticate_client():
         endpoint=endpoint,
         credential=ta_credential)
     return text_analytics_client
-
-
-client = authenticate_client()
 
 
 # Example function for recognizing entities from text
@@ -42,9 +47,6 @@ def entity_recognition_example(client):
         print("Encountered exception. {}".format(err))
 
 
-entity_recognition_example(client)
-
-
 def get_skills(results):
     """Given a result, extract all entities labeled as Skill or Product """
     skills = set()
@@ -53,3 +55,37 @@ def get_skills(results):
             skills.add(entity.text)
 
     return skills
+
+
+def embed(sentences):
+    """Get sentence embeddings"""
+    # TODO Stem and Lemmatize
+    return model.encode(sentences)
+
+
+def ranked_related_concepts(skills):
+    """Given a list of skills, use cosine similarity to find the most closely related concepts"""
+    concepts = graph.load_topics('LectureBank-master/LB-Paper/208topics.csv')
+    concept_embeddings = embed(concepts['Name'])
+    skill_embeddings = embed(skills)
+    relation = cosine_similarity(skill_embeddings, concept_embeddings)
+
+    maxes = np.max(relation, axis=0)
+    max_sort = np.argsort(-maxes)  # Sort in descending order of cosine similarity
+    ranked_concepts = concepts.iloc[max_sort]
+
+    return ranked_concepts
+
+
+if __name__ == '__main__':
+    # client = authenticate_client()
+    # entity_recognition_example(client)
+
+    # Embeddings test
+    keyword = ["markov decision process"]
+    tests = ["markov decision process", "partial order markov decision process", "this is a sandwich"]
+    # keyword_embedding = model.encode(keyword)
+    # embeddings = model.encode(tests)
+    # cos_sim = cosine_similarity(keyword_embedding, embeddings)
+
+    print(ranked_related_concepts(tests)['Name'])
