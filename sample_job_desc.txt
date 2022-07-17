@@ -1,0 +1,29 @@
+Essential Job Duties & Responsibilities
+Understanding in depth both the business and technical problems Dataworks aims to solve
+Exploring data and crafting models to answer core business problems that may not have a common blueprint
+Driving the invention of new approaches and algorithms for tackling data intensive problems
+Pioneering R&D efforts to rapidly understand and assimilate state of the art methods
+Scaling up from “laptop-scale” to “cluster scale” problems by driving efforts to standardize and industrialize solutions
+Delivering tangible value very rapidly, collaborating with diverse teams of varying disciplines and organizational backgrounds
+Interacting with senior technologists from the broader enterprise and outside of FedEx (partner ecosystems and customers) to create synergies and identify opportunities for improvement
+Championing best practices for future reuse in the form of accessible, reusable patterns, templates, and code bases
+Skill/Knowledge Considered a Plus
+Technical background in computer science, data science, machine learning, artificial intelligence, statistics or other quantitative and computational science
+A track record of designing and deploying large scale technical solutions, which deliver tangible, ongoing value
+Direct experience having built and deployed robust, complex production systems that implement modern, data scientific methods at scale
+Ability to context-switch, to provide support to dispersed teams which may need an “expert hacker” to unblock an especially challenging technical obstacle, and to work through problems as they are still being defined
+Demonstrated ability to deliver technical projects with a team, often working under tight time constraints to deliver value
+An ‘engineering’ mindset, willing to make rapid, pragmatic decisions to improve performance, accelerate progress or magnify impact
+Comfort with working with distributed teams on code-based deliverables, using version control systems and code reviews
+Solid theoretical grounding in the mathematical core of the major ideas in data science
+Strong understanding of a class of modelling or analytical techniques, often supported by Masters- or Doctoral-level research in the subject
+Fluency in the mathematical ‘primitives’ and generalizations of data science – e.g., expertise in Linear Algebra, and Vector Calculus
+Use of agile and devops practices for project and software management including continuous integration and continuous delivery
+Demonstrated expertise in working with some of the following common languages and tools:
+SKLearn, XGBoost, Tensorflow, Pytorch, MLlib and other core machine learning frameworks
+Python, Scala, Java and other modern programming languages
+MLFlow, Databricks, Spark, Kafka and other data tools and frameworks
+CPLEX, Gurobi and other similar optimization modeling packages
+Minimum Qualifications
+
+Master’s Degree or equivalent in computer science, operations research, statistics, applied mathematics or related quantitative discipline. Directly related PhD preferred. Four (4) years’ work experience in applying data science (machine learning, artificial intelligence, statistical analysis), operations research (optimization, algorithms, mathematical modeling), and data analytics modeling to decrease cost, increase profitability, and improve customer experience. Extensive knowledge in advanced data science and machine learning tools and methods, including the iterative development of analysis pipelines to provide insights at scale. Extensive knowledge and experience in conducting end-to end analyses, including data gathering and requirements specification, processing, analysis, and presentations. Strong understanding of the transportation industry, competitors, and evolving technologies. Experience providing some level of leadership in a general planning or consulting setting. Experience as a leader or a senior member of multi-functional project teams. Strong oral and written communication skills. A related advanced degree may offset the related experience requirements.

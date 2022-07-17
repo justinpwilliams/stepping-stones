@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>AutoComplete Test</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js">
+	</script>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.js">
+	</script>
+
+	<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/ui-lightness/jquery-ui.css"
+		rel="stylesheet" type="text/css" />
+</head>
+<body>
+	<h1>Stepping Stones</h1>
+
+	<div>Search your goal concept</div>
+	<input type="text" id="concepts" size="100">
+
+	<script>
+		$(function() {
+			var availableConcepts = [
+				{% for concept in concepts %}
+			"{{concept}}",
+			{% endfor %}
+		];
+		function split ( value ) {
+			return value.split( /,\s*/ );
+		}
+		function extractLast ( concept ) {
+			return split( concept ).pop();
+		}
+		$( "#concepts" )
+			.on( "keydown", function ( event ) {
+				if ( event.keyCode === $.ui.keyCode.TAB &&
+					$( this ).autocomplete( "instance" ).menu.active ) {
+				event.preventDefault();
+				}
+			})
+			.autocomplete({
+				minLength:0,
+				source: function( request, response ) {
+					response( $.ui.autocomplete.filter(
+							availableConcepts, extractLast( request.term ) ) );
+				},
+				focus: function() {
+					return false;
+				},
+				select: function( event, ui ) {
+					var terms = split( this.value );
+					terms.pop();
+					terms.push( ui.item.value );
+					terms.push( "" );
+					this.value = terms.join( ", " );
+					return false;
+				}
+			});
+		} );
+	</script>
+</body>
+</html>
