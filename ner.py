@@ -8,15 +8,15 @@ from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
 
 import graph
+from config import MSFT_COGNITIVE_KEY
 
 model = SentenceTransformer('sentence-transformers/all-distilroberta-v1')
 
-key = "d4891fdc2cfb480a9b7b8faab9dea137"
 endpoint = "https://westus.api.cognitive.microsoft.com/"
 
 
 def authenticate_client():
-    ta_credential = AzureKeyCredential(key)
+    ta_credential = AzureKeyCredential(MSFT_COGNITIVE_KEY)
     text_analytics_client = TextAnalyticsClient(
         endpoint=endpoint,
         credential=ta_credential)

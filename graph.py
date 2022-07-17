@@ -43,7 +43,7 @@ def get_lookup_topic(concept_name: str, taxonomy: pd.DataFrame) -> int:
     return taxonomy[matches]['true_id'].values
 
 
-def generate_subgraph(concept_graph, goal_concept_id, mastered_concept_id:list = []):
+def generate_subgraph(concept_graph, goal_concept_id, mastered_concept_id: list = []):
     """
     Generate a concept tree from the concept graph_to_draw given one or more goal concepts and one or more mastered concepts.
     :param concept_graph: The graph_to_draw of concepts which should contain the goal_concepts and mastered_concepts
@@ -63,9 +63,9 @@ def generate_subgraph(concept_graph, goal_concept_id, mastered_concept_id:list =
 
     # Find mastered and ancestors of mastered
     for mastered_concept in mastered_concept_id:
-    # if mastered_concept_id:
-        mastered_ancestors.add(set(nx.ancestors(graph, mastered_concept))) # TODO Error with this line. add set to set.
-        mastered_ancestors.add(mastered_concept)  # TODO, keep mastered.
+        # if mastered_concept_id:
+        mastered_ancestors.update(nx.ancestors(graph, mastered_concept))
+        # mastered_ancestors.add(mastered_concept)  # Keep mastered
 
     # Remove mastered and ancestors of mastered from goal and ancestors
     goal_ancestors = list(goal_ancestors - mastered_ancestors)
@@ -107,4 +107,3 @@ if __name__ == "__main__":
     # Example 5: Should remove 47 and 155, doesn't TODO
     ex5_graph = generate_subgraph(graph, 24, [47])
     draw_graph(ex5_graph)
-

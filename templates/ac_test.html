@@ -14,8 +14,13 @@
 <body>
 	<h1>Stepping Stones</h1>
 
-	<div>Search your goal concept</div>
-	<input type="text" id="concepts" size="100">
+	<div>Choose your goal concepts</div>
+	<input type="text" id="goal-concepts" size="100">
+	<button type="button" id="goal-concepts-submit">Save Goal Concepts</button>
+
+	<div>List your mastered concepts</div>
+	<input type="text" id="mastered-concepts" size="100">
+	<button type="button" id="mastered-concepts-submit">Save Mastered Concepts</button>
 
 	<script>
 		$(function() {
@@ -30,7 +35,32 @@
 		function extractLast ( concept ) {
 			return split( concept ).pop();
 		}
-		$( "#concepts" )
+		$( "#goal-concepts" )
+			.on( "keydown", function ( event ) {
+				if ( event.keyCode === $.ui.keyCode.TAB &&
+					$( this ).autocomplete( "instance" ).menu.active ) {
+				event.preventDefault();
+				}
+			})
+			.autocomplete({
+				minLength:0,
+				source: function( request, response ) {
+					response( $.ui.autocomplete.filter(
+							availableConcepts, extractLast( request.term ) ) );
+				},
+				focus: function() {
+					return false;
+				},
+				select: function( event, ui ) {
+					var terms = split( this.value );
+					terms.pop();
+					terms.push( ui.item.value );
+					terms.push( "" );
+					this.value = terms.join( ", " );
+					return false;
+				}
+			});
+		$( "#mastered-concepts" )
 			.on( "keydown", function ( event ) {
 				if ( event.keyCode === $.ui.keyCode.TAB &&
 					$( this ).autocomplete( "instance" ).menu.active ) {
@@ -57,5 +87,23 @@
 			});
 		} );
 	</script>
+	<script>
+		$(document).ready(function (){
+			$("#goal-concepts-submit").click(function (){
+				var values = $("#goal-concepts").val();
+				$.post("/goal_concept", {"goal_concepts": JSON.stringify(values)})
+				alert(values);
+			})
+		})
+		$(document).ready(function (){
+			$("#mastered-concepts-submit").click(function (){
+				var values = $("#mastered-concepts").val();
+				$.post("/mastered_concepts", {"mastered_concepts": JSON.stringify(values)})
+				alert(values);
+			})
+		})
+	</script>
+
+
 </body>
 </html>

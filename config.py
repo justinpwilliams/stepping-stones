@@ -1,0 +1,1 @@
+MSFT_COGNITIVE_KEY="d4891fdc2cfb480a9b7b8faab9dea137"
