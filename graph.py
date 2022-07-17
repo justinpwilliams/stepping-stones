@@ -2,6 +2,7 @@ import networkx as nx
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import json
 
 topics_file = "data/208topics.csv"
 prereq_file = "data/prerequisite_annotation.csv"
@@ -20,7 +21,8 @@ def make_graph(topics, prereqs):
     g = nx.DiGraph()
 
     # Add Nodes
-    g.add_nodes_from([(topic[0], {"name": topic[1], "link": topic[2]}) for topic in topics.values])
+    # g.add_nodes_from([(topic[0], {"name": topic[1], "link": topic[2]}) for topic in topics.values])
+    g.add_nodes_from([(topic[0], {"name": topic[1]}) for topic in topics.values])
 
     # Add directed edges when prerequisite relationship is true
     g.add_edges_from([(ids[0], ids[1]) for ids in prereqs.values if ids[2] == 1])
@@ -56,22 +58,23 @@ def generate_subgraph(concept_graph, goal_concept_id, mastered_concept_id: list 
 
     # Find ancestors from Goal
     # TODO make work for multiple goals
-    goal_ancestors = set(nx.ancestors(graph, goal_concept_id))
-    goal_ancestors.add(goal_concept_id)
+    for goal in goal_concept_id:
+        goal_ancestors = set(nx.ancestors(concept_graph, goal))
+        goal_ancestors.add(goal)
 
     mastered_ancestors = set()
 
     # Find mastered and ancestors of mastered
     for mastered_concept in mastered_concept_id:
         # if mastered_concept_id:
-        mastered_ancestors.update(nx.ancestors(graph, mastered_concept))
+        mastered_ancestors.update(nx.ancestors(concept_graph, mastered_concept))
         # mastered_ancestors.add(mastered_concept)  # Keep mastered
 
     # Remove mastered and ancestors of mastered from goal and ancestors
     goal_ancestors = list(goal_ancestors - mastered_ancestors)
 
     # return subgraph of goal and ancestors minus all mastered and ancestors.
-    return graph.subgraph(goal_ancestors)
+    return concept_graph.subgraph(goal_ancestors)
 
 
 def draw_graph(graph_to_draw):
@@ -80,15 +83,38 @@ def draw_graph(graph_to_draw):
 
 
 def get_concept_id_from_name(name: str) -> int:
+    print(f"Looking for {name}")
     topics = load_topics()
     return int(topics[topics.Name == name]['ID'].values)
 
 
-def get_concept_ids_from_names(names: list) -> list[int]:
-    concept_ids = []
-    for name in names:
-        concept_ids.append(get_concept_id_from_name(name))
-    return concept_ids
+def get_concept_ids_from_names(names: str) -> list[int]:
+    concept_list = names.replace('"','').split(',')
+    concept_list.pop()  # Remove empty last string
+    concept_list = [v.strip() for v in concept_list]
+    print(f"Concept list searching for {concept_list}")
+    concept_ids_captured = []
+    for name in concept_list:
+        concept_ids_captured.append(get_concept_id_from_name(name))
+    return concept_ids_captured
+
+
+class NpEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, np.integer):
+            return int(obj)
+        if isinstance(obj, np.floating):
+            return float(obj)
+        if isinstance(obj, np.ndarray):
+            return obj.tolist()
+        return super(NpEncoder, self).default(obj)
+
+
+def get_graph_json(concept_graph, goal_concept_id, mastered_concept_id: list = []):
+    """Returns graph in JSON format"""
+    g = generate_subgraph(concept_graph, goal_concept_id, mastered_concept_id)
+    j_format = nx.json_graph.node_link_data(g)
+    json.dump(j_format, open("static/js/force.json", "w"), cls=NpEncoder)
 
 
 if __name__ == "__main__":
@@ -124,6 +150,9 @@ if __name__ == "__main__":
     concept = "Q Learning"
     concept_id = get_concept_id_from_name(concept)
     print(concept_id)
-    concepts = ["Q Learning", "Attention Models"]
+    concepts = "Q Learning, Markov decision processes, "
     concept_ids = get_concept_ids_from_names(concepts)
     print(concept_ids)
+
+    # Trying JSON
+    get_graph_json(graph, 24, [47])

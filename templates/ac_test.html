@@ -22,6 +22,10 @@
 	<input type="text" id="mastered-concepts" size="100">
 	<button type="button" id="mastered-concepts-submit">Save Mastered Concepts</button>
 
+	<div>After selecting goal concepts and mastered concepts, click below to see your learning graph</div>
+	<a href="{{ url_for('show_graph')}}"><button type="button" id="generate-graph">Generate Graph</button></a>
+
+
 	<script>
 		$(function() {
 			var availableConcepts = [
