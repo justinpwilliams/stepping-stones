@@ -15,7 +15,7 @@ def index():
 def ac_test():
     print("Concept selection page requested")
     if request.method == "GET":
-        concepts = graph.load_topics('LectureBank-master/LB-Paper/208topics.csv')
+        concepts = graph.load_topics('../LectureBank-master/LB-Paper/208topics.csv')
         concepts = list(concepts['Name'])
 
         return render_template("ac_test.html", concepts=concepts)

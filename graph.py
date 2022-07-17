@@ -3,9 +3,9 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
-topics_file = "LectureBank-master/LB-Paper/208topics.csv"
-prereq_file = "LectureBank-master/LB-Paper/prerequisite_annotation.csv"
-lecture_file = "LectureBank-master/LB-Paper/lecturebank.tsv"
+topics_file = "data/208topics.csv"
+prereq_file = "data/prerequisite_annotation.csv"
+lecture_file = "data/lecturebank.tsv"
 
 
 def load_topics(filename=topics_file):
@@ -80,9 +80,9 @@ def draw_graph(graph_to_draw):
 
 
 if __name__ == "__main__":
-    topics_file = "LectureBank-master/LB-Paper/208topics.csv"
-    prereq_file = "LectureBank-master/LB-Paper/prerequisite_annotation.csv"
-    taxonomy_file = "LectureBank-master/LB-Paper/taxonomy.tsv"
+    topics_file = "data/208topics.csv"
+    prereq_file = "data/prerequisite_annotation.csv"
+    taxonomy_file = "data/taxonomy.tsv"
     topics = load_topics(topics_file)
     prereqs = load_prereqs(prereq_file)
     graph = make_graph(topics, prereqs)

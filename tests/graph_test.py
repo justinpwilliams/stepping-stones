@@ -6,10 +6,10 @@ import graph
 
 class GraphTests(unittest.TestCase):
     def setUp(self) -> None:
-        self.topics_file = "../LectureBank-master/LB-Paper/208topics.csv"
-        self.prereq_file = "../LectureBank-master/LB-Paper/prerequisite_annotation.csv"
-        self.prereq_file = "../LectureBank-master/LB-Paper/prerequisite_annotation.csv"
-        self.taxonomy_file = "../LectureBank-master/LB-Paper/taxonomy.tsv"
+        self.topics_file = "../../LectureBank-master/LB-Paper/208topics.csv"
+        self.prereq_file = "../../LectureBank-master/LB-Paper/prerequisite_annotation.csv"
+        self.prereq_file = "../../LectureBank-master/LB-Paper/prerequisite_annotation.csv"
+        self.taxonomy_file = "../../LectureBank-master/LB-Paper/taxonomy.tsv"
         self.topics = graph.load_topics(self.topics_file)
         self.prereqs = graph.load_prereqs(self.prereq_file)
         self.taxonomy = graph.read_taxonomy(self.taxonomy_file)
@@ -39,7 +39,7 @@ class GraphTests(unittest.TestCase):
         self.assertGreater(len(all_paths), 0)
 
     def test_can_load_lectures(self):
-        lecture_file = '../LectureBank-master/LB-Paper/lecturebank.tsv'
+        lecture_file = '../../LectureBank-master/LB-Paper/lecturebank.tsv'
         lectures = graph.load_lectures(lecture_file)
 
         # importing topic to list

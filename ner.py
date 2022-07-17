@@ -65,7 +65,7 @@ def embed(sentences):
 
 def ranked_related_concepts(skills):
     """Given a list of skills, use cosine similarity to find the most closely related concepts"""
-    concepts = graph.load_topics('LectureBank-master/LB-Paper/208topics.csv')
+    concepts = graph.load_topics('../LectureBank-master/LB-Paper/208topics.csv')
     concept_embeddings = embed(concepts['Name'])
     skill_embeddings = embed(skills)
     relation = cosine_similarity(skill_embeddings, concept_embeddings)
