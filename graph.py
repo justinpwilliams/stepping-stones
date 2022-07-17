@@ -79,6 +79,18 @@ def draw_graph(graph_to_draw):
     plt.show()
 
 
+def get_concept_id_from_name(name: str) -> int:
+    topics = load_topics()
+    return int(topics[topics.Name == name]['ID'].values)
+
+
+def get_concept_ids_from_names(names: list) -> list[int]:
+    concept_ids = []
+    for name in names:
+        concept_ids.append(get_concept_id_from_name(name))
+    return concept_ids
+
+
 if __name__ == "__main__":
     topics_file = "data/208topics.csv"
     prereq_file = "data/prerequisite_annotation.csv"
@@ -88,22 +100,30 @@ if __name__ == "__main__":
     graph = make_graph(topics, prereqs)
     taxonomy = read_taxonomy(taxonomy_file)
 
-    # Example 1: Goal Concept-Attention Models, No Mastered Concepts
-    # ex1_graph = generate_subgraph(graph, 12)
-    # draw_graph(ex1_graph)
+    # # Example 1: Goal Concept-Attention Models, No Mastered Concepts
+    # # ex1_graph = generate_subgraph(graph, 12)
+    # # draw_graph(ex1_graph)
+    #
+    # # Example 2: Goal Concept-Attention Models, One Mastered Concept
+    # ex2_graph = generate_subgraph(graph, 12, [173])
+    # draw_graph(ex2_graph)
+    #
+    # # Example 3: Goal Concept with one prerequisite
+    # ex3_graph = generate_subgraph(graph, 155)
+    # draw_graph(ex3_graph)
+    #
+    # # Example 4: 155 is a prereq of 24 and 47, how is this displayed.
+    # ex4_graph = generate_subgraph(graph, 24)
+    # draw_graph(ex4_graph)
+    #
+    # # Example 5: Should remove 47 and 155, doesn't TODO
+    # ex5_graph = generate_subgraph(graph, 24, [47])
+    # draw_graph(ex5_graph)
 
-    # Example 2: Goal Concept-Attention Models, One Mastered Concept
-    ex2_graph = generate_subgraph(graph, 12, [173])
-    draw_graph(ex2_graph)
-
-    # Example 3: Goal Concept with one prerequisite
-    ex3_graph = generate_subgraph(graph, 155)
-    draw_graph(ex3_graph)
-
-    # Example 4: 155 is a prereq of 24 and 47, how is this displayed.
-    ex4_graph = generate_subgraph(graph, 24)
-    draw_graph(ex4_graph)
-
-    # Example 5: Should remove 47 and 155, doesn't TODO
-    ex5_graph = generate_subgraph(graph, 24, [47])
-    draw_graph(ex5_graph)
+    # # Trying Concept from name
+    concept = "Q Learning"
+    concept_id = get_concept_id_from_name(concept)
+    print(concept_id)
+    concepts = ["Q Learning", "Attention Models"]
+    concept_ids = get_concept_ids_from_names(concepts)
+    print(concept_ids)
